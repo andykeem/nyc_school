@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sat_scores">SAT Scores:</string>
+    <string name="math">Math:</string>
+    <string name="reading">Reading:</string>
+    <string name="writing">Writing:</string>
+    <string name="not_available">N/A</string>
 </resources>
