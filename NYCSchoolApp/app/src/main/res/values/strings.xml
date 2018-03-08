@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NYC High Schools</string>
     <string name="school_list_err_msg">Failed to fetch NYC High Schools listing. Please try again later.</string>
-    <string name="sat_score_title">SAT Results:</string>
+    <string name="sat_score_title">SAT Results</string>
     <string name="sat_score_math">SAT Math Avg. Score:</string>
     <string name="sat_score_reading">SAT Critical Reading Avg. Score:</string>
     <string name="sat_score_writing">SAT Writing Avg. Score:</string>

@@ -1,6 +1,5 @@
 package com.example.andyk.nycschoolapp.helper;
 
-import android.net.Uri;
 import android.util.Log;
 
 import com.example.andyk.nycschoolapp.model.SchoolDetail;
@@ -14,7 +13,6 @@ import org.json.JSONTokener;
  * class that fetchs school detail information. most likely school SAT scores which makes the request
  * to "https://data.cityofnewyork.us/resource/97mf-9njv.json". Once response is back we parse the
  * JSON and stores its data to SchoolDetail object and sends to UI.
- * Created by andyk on 3/7/18.
  */
 
 public class SchoolDetailFetcher extends HttpRequest {

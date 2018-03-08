@@ -1,5 +1,7 @@
 package com.example.andyk.nycschoolapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -23,5 +25,14 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragment_container, f)
                     .commit();
         }
+    }
+
+    /**
+     * helper method that returns current activity as an intent
+     * @param context
+     * @return
+     */
+    public static Intent newIntent(Context context) {
+        return new Intent(context, MainActivity.class);
     }
 }

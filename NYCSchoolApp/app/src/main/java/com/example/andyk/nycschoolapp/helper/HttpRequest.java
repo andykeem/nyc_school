@@ -15,14 +15,14 @@ import java.util.Map;
 
 /**
  * Base class to make the HTTP requests
- * Created by andyk on 3/7/18.
  */
-
 public abstract class HttpRequest {
 
     protected static final String TAG = HttpRequest.class.getSimpleName();
     protected static final String HOST = "https://data.cityofnewyork.us";
     protected Map<String, String> mParams = new HashMap<>();
+
+    protected abstract String getPath();
 
     /**
      * uses getUrlBytes(url) method to fetch HTTP request response
@@ -107,16 +107,5 @@ public abstract class HttpRequest {
 
     protected String getHost() {
         return HOST;
-    }
-
-    protected abstract String getPath();
-
-    /**
-     * reemoves unnecessary character(s)
-     * @param text
-     * @return
-     */
-    protected String parseString(String text) {
-        return text.replaceAll("[^a-zA-Z0-9\\s()]", "");
     }
 }

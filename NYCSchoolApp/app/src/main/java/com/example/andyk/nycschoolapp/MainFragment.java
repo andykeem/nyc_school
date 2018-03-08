@@ -1,6 +1,5 @@
 package com.example.andyk.nycschoolapp;
 
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import com.example.andyk.nycschoolapp.helper.SchoolFetcher;
 import com.example.andyk.nycschoolapp.model.School;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +28,9 @@ import java.util.List;
 public class MainFragment extends Fragment {
 
     protected static final String TAG = MainFragment.class.getSimpleName();
+    protected static final String STATE_SCHOOLS = "stateSchools";
     protected RecyclerView mListSchool;
-    protected List<School> mSchools;
+    protected ArrayList<School> mSchools;
     protected TextView mTvErrMsg;
 
     public MainFragment() {
@@ -57,12 +58,17 @@ public class MainFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(STATE_SCHOOLS, mSchools);
+    }
 
-
-
-
-
-
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // restore saved data
+        if (savedInstanceState != null) {
+            mSchools = savedInstanceState.getParcelableArrayList(STATE_SCHOOLS);
+            this.updateUI();
+        }
     }
 
     public static Fragment newFragment() {
@@ -127,14 +133,14 @@ public class MainFragment extends Fragment {
     /**
      * background thread to request schools api call
      */
-    private class SchoolFetchTask extends AsyncTask<Void, Void, List> {
+    private class SchoolFetchTask extends AsyncTask<Void, Void, ArrayList> {
         @Override
-        protected List<School> doInBackground(Void... params) {
-            List<School> schools = new SchoolFetcher().fetchSchools();
+        protected ArrayList<School> doInBackground(Void... params) {
+            ArrayList<School> schools = new SchoolFetcher().fetchSchools();
             return schools;
         }
         @Override
-        protected void onPostExecute(List result) {
+        protected void onPostExecute(ArrayList result) {
             mSchools = result;
             updateUI();
         }

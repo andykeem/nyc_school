@@ -1,21 +1,22 @@
 package com.example.andyk.nycschoolapp;
 
-
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.andyk.nycschoolapp.helper.SchoolDetailFetcher;
 import com.example.andyk.nycschoolapp.model.SchoolDetail;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +27,7 @@ public class DetailFragment extends Fragment {
 
     protected static final String TAG = DetailFragment.class.getSimpleName();
     protected static final String ARG_DBN = "dbn";
+    protected static final String STATE_DETAIL = "stateDetail";
     protected ActionBar mActionBar;
     protected SchoolDetail mDetail;
     protected TextView mTvSchooName;
@@ -47,11 +49,16 @@ public class DetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setRetainInstance(true);
+
         Bundle args = this.getArguments();
         String schoolDbn = args.getString(ARG_DBN);
         String[] params = new String[]{schoolDbn};
         new SchoolDetailTask().execute(params);
         mActionBar = ((AppCompatActivity) this.getActivity()).getSupportActionBar();
+
+        // set action bar's up button
+        this.setHasOptionsMenu(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -80,10 +87,33 @@ public class DetailFragment extends Fragment {
 
         // make both School and SchoolDetail clases Parcelable
 
+        outState.putParcelable(STATE_DETAIL, mDetail);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        // restore saved data
+        if (savedInstanceState != null) {
+            mDetail = savedInstanceState.getParcelable(STATE_DETAIL);
+            this.updateUI();
+        }
+    }
 
-
+    /**
+     * hanles navigation (for now clicking to up button goes to MainActivity)
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this.getActivity());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

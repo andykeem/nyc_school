@@ -1,14 +1,51 @@
 package com.example.andyk.nycschoolapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * School subclass that sets school's detail (most likely SAT scores for now) information
- * Created by andyk on 3/7/18.
  */
-public class SchoolDetail extends School {
+public class SchoolDetail extends School implements Parcelable {
+
     protected String mSatMath;
     protected String mSatReading;
     protected String mSatWriting;
     protected String mNumSatTakers; // num_of_sat_test_takers
+
+    public static final Parcelable.Creator<SchoolDetail> CREATOR
+            = new Parcelable.Creator<SchoolDetail>() {
+        public SchoolDetail createFromParcel(Parcel in) {
+            return new SchoolDetail(in);
+        }
+        public SchoolDetail[] newArray(int size) {
+            return new SchoolDetail[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mSatMath);
+        dest.writeString(mSatReading);
+        dest.writeString(mSatWriting);
+        dest.writeString(mNumSatTakers);
+    }
+
+    public SchoolDetail(Parcel in) {
+        mSatMath = in.readString();
+        mSatReading = in.readString();
+        mSatWriting = in.readString();
+        mNumSatTakers = in.readString();
+    }
+
+    public SchoolDetail() {
+
+    }
 
     public String getSatMath() {
         return mSatMath;

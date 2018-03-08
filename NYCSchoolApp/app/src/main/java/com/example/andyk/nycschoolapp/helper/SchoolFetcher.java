@@ -1,11 +1,8 @@
 package com.example.andyk.nycschoolapp.helper;
 
-import android.net.Uri;
-import android.text.Html;
 import android.util.Log;
 
 import com.example.andyk.nycschoolapp.model.School;
-import com.example.andyk.nycschoolapp.model.SchoolDetail;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +14,6 @@ import java.util.List;
 
 /**
  * class that fetchs nyc high schools listing
- * Created by andyk on 3/7/18.
  */
 
 public class SchoolFetcher extends HttpRequest {
@@ -38,13 +34,13 @@ public class SchoolFetcher extends HttpRequest {
         return mPath;
     }
 
-    public List<School> fetchSchools() {
+    public ArrayList<School> fetchSchools() {
         String url = this.getRequestUrl();
         String resp = this.getUrlString(url);
         if (resp == null) {
             return null;
         }
-        List schools = this.getSchools(resp);
+        ArrayList schools = this.getSchools(resp);
         return schools;
     }
 
@@ -54,8 +50,8 @@ public class SchoolFetcher extends HttpRequest {
      * @param resp
      * @return
      */
-    protected List<School> getSchools(String resp) {
-        List<School> schools = new ArrayList<>();
+    protected ArrayList<School> getSchools(String resp) {
+        ArrayList<School> schools = new ArrayList<>();
         JSONTokener tokener = new JSONTokener(resp);
         JSONArray arr = null;
         try {
@@ -67,7 +63,7 @@ public class SchoolFetcher extends HttpRequest {
                     School school = new School();
                     school.setDbn(json.getString("dbn"));
                     String name = json.getString("school_name");
-                    name = this.parseString(name);
+                    name = this.cleanSchoolName(name);
                     school.setName(name);
                     schools.add(school);
                 }
@@ -76,5 +72,14 @@ public class SchoolFetcher extends HttpRequest {
             Log.e(TAG, je.getMessage(), je);
         }
         return schools;
+    }
+
+    /**
+     * reemoves unnecessary character(s)
+     * @param str
+     * @return
+     */
+    protected String cleanSchoolName(String str) {
+        return str.replaceAll("[^a-zA-Z0-9\\s()]", "");
     }
 }
