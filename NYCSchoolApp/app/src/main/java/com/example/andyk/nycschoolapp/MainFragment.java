@@ -20,7 +20,6 @@ import com.example.andyk.nycschoolapp.helper.SchoolFetcher;
 import com.example.andyk.nycschoolapp.model.School;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass that uses the RecyclerView to render NYC High Schools information.
@@ -84,23 +83,25 @@ public class MainFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * update menu item based on sort / reset
+     */
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (mSorted) {
-            menu.findItem(R.id.menu_sort_alphanum).setVisible(false);
-            menu.findItem(R.id.menu_sort_reset).setVisible(true);
-        } else {
-            menu.findItem(R.id.menu_sort_alphanum).setVisible(true);
-            menu.findItem(R.id.menu_sort_reset).setVisible(false);
-        }
-
+        menu.findItem(R.id.menu_sort_alpha).setVisible(!mSorted);
+        menu.findItem(R.id.menu_sort_reset).setVisible(mSorted);
     }
 
+    /**
+     * top menu handler
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_sort_alphanum:
+            case R.id.menu_sort_alpha: // sorts the listing alphabetically
                 mSorted = true;
                 if (mSortedSchools == null) {
                     new SchoolSortTask().execute();
@@ -110,7 +111,7 @@ public class MainFragment extends Fragment {
                 }
                 this.invalidateOptionsMenu();
                 return true;
-            case R.id.menu_sort_reset:
+            case R.id.menu_sort_reset: // resets alpahbetic sorting
                 mSorted = false;
                 if (mRandomSchools == null) {
                     new SchoolFetchTask().execute();
