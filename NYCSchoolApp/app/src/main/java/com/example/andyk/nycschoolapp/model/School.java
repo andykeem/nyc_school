@@ -1,6 +1,7 @@
 package com.example.andyk.nycschoolapp.model;
 
 /**
+ * School class that's being used for list view
  * Created by andyk on 3/7/18.
  */
 

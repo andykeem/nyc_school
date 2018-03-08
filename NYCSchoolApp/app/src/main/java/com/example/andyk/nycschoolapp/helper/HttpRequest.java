@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Base class to make the HTTP requests
  * Created by andyk on 3/7/18.
  */
 
@@ -21,6 +22,11 @@ public class HttpRequest {
     protected static final String TAG = HttpRequest.class.getSimpleName();
     protected Map<String, String> mParams = new HashMap<>();
 
+    /**
+     * uses getUrlBytes(url) method to fetch HTTP request response
+     * @param url
+     * @return
+     */
     public String getUrlString(String url) {
         byte[] bytes = null;
         try {
@@ -36,24 +42,47 @@ public class HttpRequest {
         return null;
     }
 
+    /**
+     * uses Android's HttpURLConnection class to fetch the response using String spec ENDPOINT
+     * @param spec
+     * @return
+     * @throws IOException
+     */
     public byte[] getUrlBytes(String spec) throws IOException {
-        URL url = new URL(spec);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            return null;
-        }
-        InputStream in = conn.getInputStream();
+        HttpURLConnection conn = null;
+        InputStream in = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] bytes = new byte[1024];
-        int bytesRead = in.read(bytes);
-        while (bytesRead != -1) {
-            out.write(bytes, 0, bytesRead);
-            bytesRead = in.read(bytes);
+        try {
+            URL url = new URL(spec);
+            conn = (HttpURLConnection) url.openConnection();
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+            in = conn.getInputStream();
+            byte[] bytes = new byte[1024];
+            int bytesRead = in.read(bytes);
+            while (bytesRead != -1) {
+                out.write(bytes, 0, bytesRead);
+                bytesRead = in.read(bytes);
+            }
+            return out.toByteArray();
+        } catch (IOException ioe) {
+            Log.e(TAG, ioe.getMessage(), ioe);
+        } finally {
+            conn.disconnect();
+            out.close();
+            if (in != null) {
+                in.close();
+            }
         }
-        conn.disconnect();
-        return out.toByteArray();
+        return null;
     }
 
+    /**
+     * sets request parameters to mParams instance variable
+     * @param key
+     * @param val
+     */
     protected void setParam(String key, String val) {
         mParams.put(key, val);
     }

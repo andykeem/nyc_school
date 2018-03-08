@@ -20,13 +20,17 @@ import com.example.andyk.nycschoolapp.model.School;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass that uses the RecyclerView to render NYC High Schools information.
+ * It makes the API request to "https://data.cityofnewyork.us/resource/734v-jeq5.json" and once JSON
+ * response is back it parses and stores all schools information in ArrayList of School objects and
+ * then updates the recycler adapter based on that list.
  */
 public class MainFragment extends Fragment {
 
     protected static final String TAG = MainFragment.class.getSimpleName();
     protected RecyclerView mListSchool;
     protected List<School> mSchools;
+    protected TextView mTvErrMsg;
 
     public MainFragment() {
         // Required empty public constructor
@@ -35,6 +39,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setRetainInstance(true);
         new SchoolFetchTask().execute();
     }
 
@@ -45,8 +50,19 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         mListSchool = v.findViewById(R.id.list_school);
         mListSchool.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
+        mTvErrMsg = v.findViewById(R.id.tv_err_msg);
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+
+
+
+
     }
 
     public static Fragment newFragment() {
@@ -54,13 +70,20 @@ public class MainFragment extends Fragment {
         return f;
     }
 
+    /**
+     * sets RecyclerView's ListSchoolAdapter using mSchools list
+     */
     protected void updateUI() {
-        if (mSchools.isEmpty()) {
+        if ((mSchools == null) || mSchools.isEmpty()) {
+            mTvErrMsg.setText(R.string.school_list_err_msg);
             return;
         }
         mListSchool.setAdapter(new ListSchoolAdapter());
     }
 
+    /**
+     * custom ViewHolder class for the RecyclerView
+     */
     private class SchoolView extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected School mItem;
         protected TextView mTvSchoolName;
@@ -81,6 +104,9 @@ public class MainFragment extends Fragment {
         }
     }
 
+    /**
+     * custom RecyclerView adapter to list highschool names
+     */
     private class ListSchoolAdapter extends RecyclerView.Adapter<SchoolView> {
         @Override
         public int getItemCount() {
@@ -98,12 +124,12 @@ public class MainFragment extends Fragment {
         }
     }
 
+    /**
+     * background thread to request schools api call
+     */
     private class SchoolFetchTask extends AsyncTask<Void, Void, List> {
         @Override
         protected List<School> doInBackground(Void... params) {
-//            String url = "https://www.google.com/";
-//            String response = new HttpRequest().getUrlString(url);
-
             List<School> schools = new SchoolFetcher().fetchSchools();
             return schools;
         }

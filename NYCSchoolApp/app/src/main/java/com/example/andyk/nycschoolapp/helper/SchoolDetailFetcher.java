@@ -11,6 +11,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
+ * class that fetchs school detail information. most likely school SAT scores which makes the request
+ * to "https://data.cityofnewyork.us/resource/97mf-9njv.json". Once response is back we parse the
+ * JSON and stores its data to SchoolDetail object and sends to UI.
  * Created by andyk on 3/7/18.
  */
 
@@ -20,6 +23,10 @@ public class SchoolDetailFetcher extends SchoolFetcher {
     protected static final String PATH = "resource/734v-jeq5.json";
     protected static final String PARAM_DETAIL_KEY = "dbn";
 
+    /**
+     * adds dbn parameter to request uri
+     * @return
+     */
     protected Uri getRequestUri() {
         Uri.Builder baseUri = this.getBaseUri();
         baseUri.appendEncodedPath(PATH);
@@ -39,6 +46,11 @@ public class SchoolDetailFetcher extends SchoolFetcher {
         return detail;
     }
 
+    /**
+     * parses JSON response and stores its data to SchoolDetail object
+     * @param resp
+     * @return
+     */
     protected SchoolDetail getSchoolDetail(String resp) {
         try {
             JSONArray arr = (JSONArray) new JSONTokener(resp).nextValue();
@@ -48,6 +60,7 @@ public class SchoolDetailFetcher extends SchoolFetcher {
                 if (json != null) {
                     SchoolDetail detail = new SchoolDetail();
                     detail.setDbn(json.getString("dbn"));
+                    detail.setNumSatTakers(json.getString("num_of_sat_test_takers"));
                     detail.setSatReading(json.getString("sat_critical_reading_avg_score"));
                     detail.setSatMath(json.getString("sat_math_avg_score"));
                     detail.setSatWriting(json.getString("sat_writing_avg_score"));

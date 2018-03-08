@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * class that fetchs nyc high schools listing
  * Created by andyk on 3/7/18.
  */
 
@@ -31,6 +32,11 @@ public class SchoolFetcher extends HttpRequest {
         return Uri.parse(HOST).buildUpon();
     }
 
+    /**
+     * sets ENDPOINT uri. For efficient request we set $select parameter to pull two school fields
+     * (dbn and school_name) per school
+     * @return
+     */
     protected Uri getRequestUri() {
         Uri.Builder baseUri = this.getBaseUri();
         baseUri.appendEncodedPath(PATH);
@@ -46,10 +52,19 @@ public class SchoolFetcher extends HttpRequest {
     public List<School> fetchSchools() {
         String url = this.getRequestUrl();
         String resp = this.getUrlString(url);
+        if (resp == null) {
+            return null;
+        }
         List schools = this.getSchools(resp);
         return schools;
     }
 
+    /**
+     * parses JSON response and stores each school info (dbn, school_name) to School object and finally
+     * return ArrayList of Schools
+     * @param resp
+     * @return
+     */
     protected List<School> getSchools(String resp) {
         List<School> schools = new ArrayList<>();
         JSONTokener tokener = new JSONTokener(resp);

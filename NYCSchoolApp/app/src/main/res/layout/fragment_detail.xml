@@ -8,14 +8,23 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_school_name"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/tv_sat_score"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sat_scores"
+        android:text="@string/sat_score_title"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_school_name"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/tv_label_math"
@@ -23,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:text="@string/math"
+        android:text="@string/sat_score_math"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_sat_score" />
 
@@ -42,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/reading"
+        android:text="@string/sat_score_reading"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_label_math" />
 
@@ -61,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/writing"
+        android:text="@string/sat_score_writing"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_label_reading" />
 
@@ -73,5 +82,24 @@
         android:id="@+id/tv_score_writing"
         app:layout_constraintLeft_toRightOf="@id/tv_label_writing"
         app:layout_constraintTop_toBottomOf="@id/tv_score_reading"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_label_sat_takers"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/sat_takers"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_label_writing"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_num_sat_takers"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toRightOf="@id/tv_label_sat_takers"
+        app:layout_constraintTop_toBottomOf="@id/tv_score_writing"/>
 
 </android.support.constraint.ConstraintLayout>

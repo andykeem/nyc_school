@@ -4,15 +4,16 @@
     android:layout_height="match_parent"
     tools:context="com.example.andyk.nycschoolapp.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />-->
-
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/list_school"/>
+        android:id="@+id/list_school" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_err_msg"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"/>
 
 </FrameLayout>

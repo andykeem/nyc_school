@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/**
+ * Activity class that holds school detail fragment UI
+ */
 public class DetailActivity extends AppCompatActivity {
 
     protected static final String INTENT_EXTRA_SCHOOL_DBN = "dbn";
@@ -14,7 +17,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_main);
 
         FragmentManager fm = this.getSupportFragmentManager();
         Fragment f = fm.findFragmentById(R.id.fragment_container);
