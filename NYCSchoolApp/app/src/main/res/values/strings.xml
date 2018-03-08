@@ -7,4 +7,6 @@
     <string name="sat_score_writing">SAT Writing Avg. Score:</string>
     <string name="sat_takers">Num of SAT Test Takers</string>
     <string name="not_available">N/A</string>
+    <string name="menu_sort_alphanum">Sort [A-Z]</string>
+    <string name="menu_sort_reset">Reset Sort</string>
 </resources>

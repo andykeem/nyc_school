@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,7 +34,10 @@ public class MainFragment extends Fragment {
     protected static final String STATE_SCHOOLS = "stateSchools";
     protected RecyclerView mListSchool;
     protected ArrayList<School> mSchools;
+    protected ArrayList<School> mRandomSchools;
+    protected ArrayList<School> mSortedSchools;
     protected TextView mTvErrMsg;
+    protected boolean mSorted;
 
     public MainFragment() {
         // Required empty public constructor
@@ -40,6 +46,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setHasOptionsMenu(true);
         this.setRetainInstance(true);
         new SchoolFetchTask().execute();
     }
@@ -71,9 +78,59 @@ public class MainFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_top, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mSorted) {
+            menu.findItem(R.id.menu_sort_alphanum).setVisible(false);
+            menu.findItem(R.id.menu_sort_reset).setVisible(true);
+        } else {
+            menu.findItem(R.id.menu_sort_alphanum).setVisible(true);
+            menu.findItem(R.id.menu_sort_reset).setVisible(false);
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sort_alphanum:
+                mSorted = true;
+                if (mSortedSchools == null) {
+                    new SchoolSortTask().execute();
+                } else {
+                    mSchools = mSortedSchools;
+                    this.updateUI();
+                }
+                this.invalidateOptionsMenu();
+                return true;
+            case R.id.menu_sort_reset:
+                mSorted = false;
+                if (mRandomSchools == null) {
+                    new SchoolFetchTask().execute();
+                } else {
+                    mSchools = mRandomSchools;
+                    this.updateUI();
+                }
+                this.invalidateOptionsMenu();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void invalidateOptionsMenu() {
+        this.getActivity().invalidateOptionsMenu();
+    }
+
     public static Fragment newFragment() {
-        Fragment f = new MainFragment();
-        return f;
+        Fragment frgmnt = new MainFragment();
+        return frgmnt;
     }
 
     /**
@@ -142,6 +199,21 @@ public class MainFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList result) {
             mSchools = result;
+            mRandomSchools = mSchools;
+            updateUI();
+        }
+    }
+
+    private class SchoolSortTask extends AsyncTask<Void, Void, ArrayList<School>> {
+        @Override
+        protected ArrayList<School> doInBackground(Void... params) {
+            ArrayList<School> schools = new SchoolFetcher().fetchSortedSchools();
+            return schools;
+        }
+        @Override
+        protected void onPostExecute(ArrayList<School> result) {
+            mSchools = result;
+            mSortedSchools = mSchools;
             updateUI();
         }
     }

@@ -27,7 +27,7 @@ public class SchoolFetcher extends HttpRequest {
 
     public SchoolFetcher() {
         this.setParam(PARAM_SELECT_KEY, PARAM_SELECT_VALUE);
-        this.setParam(PARAM_ORDER_KEY, PARAM_ORDER_VALUE);
+//        this.setParam(PARAM_ORDER_KEY, PARAM_ORDER_VALUE);
     }
 
     protected String getPath() {
@@ -42,6 +42,11 @@ public class SchoolFetcher extends HttpRequest {
         }
         ArrayList schools = this.getSchools(resp);
         return schools;
+    }
+
+    public ArrayList<School> fetchSortedSchools() {
+        this.setParam(PARAM_ORDER_KEY, PARAM_ORDER_VALUE);
+        return this.fetchSchools();
     }
 
     /**
