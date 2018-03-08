@@ -17,25 +17,14 @@ import org.json.JSONTokener;
  * Created by andyk on 3/7/18.
  */
 
-public class SchoolDetailFetcher extends SchoolFetcher {
+public class SchoolDetailFetcher extends HttpRequest {
 
     protected static final String TAG = SchoolDetailFetcher.class.getSimpleName();
-    protected static final String PATH = "resource/734v-jeq5.json";
     protected static final String PARAM_DETAIL_KEY = "dbn";
+    protected String mPath = "resource/734v-jeq5.json";
 
-    /**
-     * adds dbn parameter to request uri
-     * @return
-     */
-    protected Uri getRequestUri() {
-        Uri.Builder baseUri = this.getBaseUri();
-        baseUri.appendEncodedPath(PATH);
-        for (String key : mParams.keySet()) {
-            String val = mParams.get(key);
-            baseUri.appendQueryParameter(key, val);
-        }
-        Uri uri = baseUri.build();
-        return uri;
+    protected String getPath() {
+        return mPath;
     }
 
     public SchoolDetail getDetailByDbn(String dbn) {

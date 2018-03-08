@@ -1,5 +1,6 @@
 package com.example.andyk.nycschoolapp.helper;
 
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -17,9 +18,10 @@ import java.util.Map;
  * Created by andyk on 3/7/18.
  */
 
-public class HttpRequest {
+public abstract class HttpRequest {
 
     protected static final String TAG = HttpRequest.class.getSimpleName();
+    protected static final String HOST = "https://data.cityofnewyork.us";
     protected Map<String, String> mParams = new HashMap<>();
 
     /**
@@ -60,10 +62,9 @@ public class HttpRequest {
             }
             in = conn.getInputStream();
             byte[] bytes = new byte[1024];
-            int bytesRead = in.read(bytes);
-            while (bytesRead != -1) {
+            int bytesRead;
+            while ((bytesRead = in.read(bytes)) != -1) {
                 out.write(bytes, 0, bytesRead);
-                bytesRead = in.read(bytes);
             }
             return out.toByteArray();
         } catch (IOException ioe) {
@@ -85,5 +86,37 @@ public class HttpRequest {
      */
     protected void setParam(String key, String val) {
         mParams.put(key, val);
+    }
+
+    /**
+     * sets ENDPOINT uri. For efficient request we set $select parameter to pull two school fields
+     * (dbn and school_name) per school
+     * @return
+     */
+    protected String getRequestUrl() {
+        Uri.Builder builder = Uri.parse(this.getHost()).buildUpon();
+        builder.appendEncodedPath(this.getPath());
+        for (String key : mParams.keySet()) {
+            String val = mParams.get(key);
+            builder.appendQueryParameter(key, val);
+        }
+        String url = builder.toString();
+        Log.d(TAG, "request url: " + url);
+        return url;
+    }
+
+    protected String getHost() {
+        return HOST;
+    }
+
+    protected abstract String getPath();
+
+    /**
+     * reemoves unnecessary character(s)
+     * @param text
+     * @return
+     */
+    protected String parseString(String text) {
+        return text.replaceAll("[^a-zA-Z0-9\\s()]", "");
     }
 }

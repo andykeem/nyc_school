@@ -1,6 +1,7 @@
 package com.example.andyk.nycschoolapp.helper;
 
 import android.net.Uri;
+import android.text.Html;
 import android.util.Log;
 
 import com.example.andyk.nycschoolapp.model.School;
@@ -22,31 +23,19 @@ import java.util.List;
 public class SchoolFetcher extends HttpRequest {
 
     protected static final String TAG = SchoolFetcher.class.getSimpleName();
-
-    protected static final String HOST = "https://data.cityofnewyork.us";
-    protected static final String PATH = "resource/97mf-9njv.json";
     protected static final String PARAM_SELECT_KEY = "$select";
     protected static final String PARAM_SELECT_VALUE = "dbn,school_name";
+    protected static final String PARAM_ORDER_KEY = "$order";
+    protected static final String PARAM_ORDER_VALUE = "school_name";
+    protected String mPath = "resource/97mf-9njv.json";
 
-    protected Uri.Builder getBaseUri() {
-        return Uri.parse(HOST).buildUpon();
+    public SchoolFetcher() {
+        this.setParam(PARAM_SELECT_KEY, PARAM_SELECT_VALUE);
+        this.setParam(PARAM_ORDER_KEY, PARAM_ORDER_VALUE);
     }
 
-    /**
-     * sets ENDPOINT uri. For efficient request we set $select parameter to pull two school fields
-     * (dbn and school_name) per school
-     * @return
-     */
-    protected Uri getRequestUri() {
-        Uri.Builder baseUri = this.getBaseUri();
-        baseUri.appendEncodedPath(PATH);
-        Uri uri = baseUri.appendQueryParameter(PARAM_SELECT_KEY, PARAM_SELECT_VALUE)
-                .build();
-        return uri;
-    }
-
-    protected String getRequestUrl() {
-        return this.getRequestUri().toString();
+    protected String getPath() {
+        return mPath;
     }
 
     public List<School> fetchSchools() {
@@ -77,7 +66,9 @@ public class SchoolFetcher extends HttpRequest {
                 if (json != null) {
                     School school = new School();
                     school.setDbn(json.getString("dbn"));
-                    school.setName(json.getString("school_name"));
+                    String name = json.getString("school_name");
+                    name = this.parseString(name);
+                    school.setName(name);
                     schools.add(school);
                 }
             }
